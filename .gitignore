@@ -24,3 +24,7 @@ mayhem_chatbot-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+.env
+.idea
+*.iml
