@@ -24,7 +24,8 @@ defmodule MayhemChatbot.MixProject do
       {:ex_gram, "~> 0.30.0"},
       {:tesla, "~> 1.2"},
       {:hackney, "~> 1.12"},
-      {:jason, ">= 1.0.0"}
+      {:jason, ">= 1.0.0"},
+      {:dotenv_parser, "~> 1.2"}
     ]
   end
 end
