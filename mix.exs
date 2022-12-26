@@ -26,7 +26,8 @@ defmodule MayhemChatbot.MixProject do
       {:tesla, "~> 1.2"},
       {:hackney, "~> 1.12"},
       {:jason, ">= 1.0.0"},
-      {:dotenv_parser, "~> 1.2"}
+      {:dotenv_parser, "~> 1.2"},
+      {:openai, "~> 0.2.3"}
     ]
   end
 end
