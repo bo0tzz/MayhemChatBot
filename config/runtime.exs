@@ -7,6 +7,8 @@ end
 chats_allowlist =
   System.get_env("CHATS_ALLOWLIST", "")
   |> String.split(",")
+  |> Enum.reject(&(String.length(&1) == 0))
+  |> Enum.map(&String.to_integer/1)
 
 config :mayhem_chatbot,
   bot_token: System.fetch_env!("BOT_TOKEN"),

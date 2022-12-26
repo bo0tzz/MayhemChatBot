@@ -8,6 +8,10 @@ defmodule MayhemChatbot do
     name: @bot,
     setup_commands: true
 
+  middleware(MayhemChatbot.Middleware.DevLogMessage)
+  middleware(MayhemChatbot.Middleware.Allowlist)
+  middleware(ExGram.Middleware.IgnoreUsername)
+
   def handle({:text, "@mayhemchatbot " <> text, %{from: %{username: user}} = msg}, context) do
     Logger.info("Got tagged")
 
@@ -60,7 +64,7 @@ defmodule MayhemChatbot do
   end
 
   def complete_prompt(prompt) do
-    {:ok, choices: [res]} = OpenAI.completions("davinci", prompt: prompt)
+    {:ok, choices: [res]} = OpenAI.completions("davinci", prompt: prompt, max_tokens: 4096)
     res
   end
 end
