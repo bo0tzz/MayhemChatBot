@@ -1,18 +1,12 @@
 defmodule MayhemChatbot do
-  @moduledoc """
-  Documentation for `MayhemChatbot`.
-  """
+  require Logger
 
-  @doc """
-  Hello world.
+  @bot :mayhem_chatbot
 
-  ## Examples
+  use ExGram.Bot,
+    name: @bot,
+    setup_commands: true
 
-      iex> MayhemChatbot.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
+  def bot(), do: @bot
+  def me(), do: ExGram.get_me(bot: bot())
 end
