@@ -5,7 +5,7 @@ ENV MIX_ENV=prod
 WORKDIR /build/
 
 COPY . .
-RUN mix deps.get
+RUN mix deps.get --only prod
 RUN mix release
 
 FROM bitwalker/alpine-elixir:latest AS run
