@@ -9,7 +9,7 @@ defmodule MayhemChatbot.Middleware.Allowlist do
         _opts
       ) do
     allowed = Application.fetch_env!(:mayhem_chatbot, :chats_allowlist)
-    Logger.debug("Testing message from chat #{chat_id} against allowlist #{allowed}")
+    Logger.debug("Testing message from chat #{chat_id} against allowlist #{inspect(allowed)}")
 
     case chat_id in allowed do
       true ->
