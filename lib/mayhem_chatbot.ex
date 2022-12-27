@@ -40,31 +40,32 @@ defmodule MayhemChatbot do
         reply(prompt, msg, context)
 
       _ ->
-        Logger.info("Skipping message")
+        Logger.debug("Ignoring message")
     end
   end
 
   def reply(prompt, msg, context) do
-    prompt = @preprompt <> prompt
+    # prompt = @preprompt <> prompt
     Logger.info("Generating reply to prompt: #{prompt}")
 
-    res = complete_prompt(prompt)
-    Logger.debug("Got reply: #{inspect(res)}")
+    response =
+      case OpenAI.completions("davinci",
+             prompt: prompt,
+             max_tokens: Application.fetch_env!(:mayhem_chatbot, :gpt3_max_tokens)
+           ) do
+        {:ok, %{choices: [%{"text" => r}]}} -> r
+        {:error, %{"error" => %{"message" => m}}} -> m
+      end
+
+    Logger.debug("Got reply: #{response}")
+
+    # GPT likes to pretend to be you...
+    # response = response |> String.split("\n@") |> List.first()
 
     answer(
       context,
-      res["text"],
+      response,
       reply_to_message_id: msg.message_id
     )
-  end
-
-  # Dev catchall
-  def complete_prompt(_) do
-    %{"text" => "This is a fake reply :D"}
-  end
-
-  def complete_prompt(prompt) do
-    {:ok, choices: [res]} = OpenAI.completions("davinci", prompt: prompt, max_tokens: 4096)
-    res
   end
 end

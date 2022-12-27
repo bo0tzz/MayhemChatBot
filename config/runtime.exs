@@ -12,7 +12,8 @@ chats_allowlist =
 
 config :mayhem_chatbot,
   bot_token: System.fetch_env!("BOT_TOKEN"),
-  chats_allowlist: chats_allowlist
+  chats_allowlist: chats_allowlist,
+  gpt3_max_tokens: System.get_env("GPT3_MAX_TOKENS", "40") |> String.to_integer()
 
 config :openai,
   api_key: System.fetch_env!("OPENAI_API_KEY")
