@@ -20,4 +20,6 @@ defmodule MayhemChatbot.Middleware.Allowlist do
         %{context | halted: true}
     end
   end
+
+  def call(cnt, _opts), do: cnt
 end
