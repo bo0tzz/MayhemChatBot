@@ -8,9 +8,40 @@ defmodule MayhemChatbot do
     name: @bot,
     setup_commands: true
 
+  command("image", description: "Generate an image")
+
   middleware(MayhemChatbot.Middleware.DevLogMessage)
   middleware(MayhemChatbot.Middleware.Allowlist)
   middleware(ExGram.Middleware.IgnoreUsername)
+
+  def handle({:command, :image, %{reply_to_message: %{text: prompt}}}, context),
+    do: image_command(prompt, context)
+
+  def handle({:command, :image, %{text: prompt}}, context), do: image_command(prompt, context)
+
+  def image_command(prompt, context) do
+    Logger.info("Got image prompt: '#{prompt}'")
+    msg = context.update.message
+
+    OpenAI.Images.Generations.fetch([prompt: prompt], recv_timeout: 10 * 60 * 1000)
+    |> case do
+      {:ok, %{data: [%{"url" => img_url}]}} ->
+        {:ok, _} =
+          ExGram.send_photo(
+            msg.chat.id,
+            img_url,
+            bot: @bot,
+            reply_to_message_id: msg.message_id
+          )
+
+      {:error, %{"error" => %{"message" => error}}} ->
+        answer(
+          context,
+          error,
+          reply_to_message_id: msg.message_id
+        )
+    end
+  end
 
   def handle({:text, "@mayhemchatbot " <> text, %{from: user} = msg}, context) do
     Logger.info("Got tagged")
