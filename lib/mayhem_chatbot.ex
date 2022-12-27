@@ -12,11 +12,13 @@ defmodule MayhemChatbot do
   middleware(MayhemChatbot.Middleware.Allowlist)
   middleware(ExGram.Middleware.IgnoreUsername)
 
-  def handle({:text, "@mayhemchatbot " <> text, %{from: %{username: user}} = msg}, context) do
+  def handle({:text, "@mayhemchatbot " <> text, %{from: user} = msg}, context) do
     Logger.info("Got tagged")
 
+    handle = get_user_handle(user)
+
     prompt = """
-    @#{user}: #{text}
+    @#{handle}: #{text}
     @mayhemchatbot:
     """
 
@@ -26,14 +28,16 @@ defmodule MayhemChatbot do
   def handle({:text, text, msg}, context) do
     case msg do
       %{
-        from: %{username: user},
+        from: user,
         reply_to_message: %{from: %{username: "mayhemchatbot"}, text: reply_text}
       } ->
         Logger.info("Got reply chain message")
 
+        handle = get_user_handle(user)
+
         prompt = """
         @mayhemchatbot: #{reply_text}
-        @#{user}: #{text}
+        @#{handle}: #{text}
         @mayhemchatbot:
         """
 
@@ -68,4 +72,12 @@ defmodule MayhemChatbot do
       reply_to_message_id: msg.message_id
     )
   end
+
+  defp get_user_handle(%{username: username}), do: "@" <> username
+
+  defp get_user_handle(%{first_name: first_name, last_name: last_name}),
+    do: "@#{first_name} #{last_name}"
+
+  defp get_user_handle(%{first_name: first_name}),
+    do: "@#{first_name}"
 end
