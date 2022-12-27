@@ -1,21 +1,11 @@
 # MayhemChatbot
 
-**TODO: Add description**
+This is a telegram bot that interfaces with OpenAI's GPT3. 
 
-## Installation
+Required env vars:
+BOT_TOKEN - Telegram bot API token
+CHATS_ALLOWLIST - Comma-separated list of telegram chat IDs to allow
+OPENAI_API_KEY
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `mayhem_chatbot` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:mayhem_chatbot, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/mayhem_chatbot>.
-
+Optional:
+GPT3_MAX_TOKENS
